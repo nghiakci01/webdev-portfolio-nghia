@@ -1,12 +1,4 @@
-const skills = [
-  { name: "HTML / CSS", level: 90 },
-  { name: "JavaScript", level: 80 },
-  { name: "PHP", level: 75 },
-  { name: "MySQL", level: 70 },
-  { name: "Laravel", level: 65 },
-  { name: "UI/UX Design", level: 70 },
-  { name: "Git / Github", level: 75 },
-];
+import { skillsData } from "@/lib/config";
 
 const Skills = () => {
   return (
@@ -18,7 +10,7 @@ const Skills = () => {
         <p className="text-muted-foreground text-center mb-12 font-display text-sm">Skills</p>
 
         <div className="max-w-2xl mx-auto grid gap-6">
-          {skills.map((skill, i) => (
+          {skillsData.map((skill, i) => (
             <div key={i}>
               <div className="flex justify-between mb-2">
                 <span className="font-display text-sm font-medium">{skill.name}</span>

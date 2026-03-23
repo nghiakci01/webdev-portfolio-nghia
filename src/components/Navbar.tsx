@@ -1,23 +1,25 @@
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
-
-const navItems = [
-  { label: "Trang chủ", href: "#hero" },
-  { label: "Giới thiệu", href: "#about" },
-  { label: "Kỹ năng", href: "#skills" },
-  { label: "Dự án", href: "#projects" },
-  { label: "Liên hệ", href: "#contact" },
-];
+import { Menu, X, Moon, Sun } from "lucide-react";
+import { useTheme } from "@/hooks/use-theme";
+import { useActiveSection } from "@/hooks/use-active-section";
+import { navItems } from "@/lib/config";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const activeSection = useActiveSection();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const isActive = (href: string) => {
+    const sectionId = href.replace("#", "");
+    return activeSection === sectionId;
+  };
 
   return (
     <nav
@@ -34,20 +36,44 @@ const Navbar = () => {
         <ul className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <li key={item.href}>
-              <a href={item.href} className="nav-link">
+              <a
+                href={item.href}
+                className={`nav-link transition-colors ${isActive(item.href) ? "nav-link-active" : ""}`}
+              >
                 {item.label}
               </a>
             </li>
           ))}
         </ul>
 
+        {/* Desktop actions */}
+        <div className="hidden md:flex items-center gap-4">
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-lg hover:bg-secondary transition-colors"
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+        </div>
+
         {/* Mobile toggle */}
-        <button
-          className="md:hidden text-foreground"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="md:hidden flex items-center gap-4">
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-lg hover:bg-secondary transition-colors"
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+          <button
+            className="text-foreground"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
@@ -58,7 +84,7 @@ const Navbar = () => {
               <li key={item.href}>
                 <a
                   href={item.href}
-                  className="nav-link text-base"
+                  className={`nav-link text-base transition-colors block ${isActive(item.href) ? "nav-link-active" : ""}`}
                   onClick={() => setMobileOpen(false)}
                 >
                   {item.label}

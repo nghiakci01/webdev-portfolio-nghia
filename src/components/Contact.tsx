@@ -1,14 +1,51 @@
 import { useState } from "react";
-import { Mail, Phone, Send } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Mail, Phone, Send, Loader } from "lucide-react";
 import { toast } from "sonner";
+import { contactFormSchema, ContactFormData } from "@/lib/validation";
+import { contactInfo } from "@/lib/config";
+import { trackFormSubmission } from "@/lib/analytics";
 
 const Contact = () => {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success("Cảm ơn bạn đã liên hệ! Mình sẽ phản hồi sớm nhất.");
-    setForm({ name: "", email: "", message: "" });
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      setIsSubmitting(true);
+      
+      // Uncomment and use EmailJS when configured
+      // import { sendContactEmail } from "@/lib/emailjs";
+      // const result = await sendContactEmail(data);
+      // if (!result.success) {
+      //   toast.error(result.message);
+      //   trackFormSubmission('contact_form', false);
+      //   return;
+      // }
+      
+      // For demo purposes, just simulate sending
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
+      // Track successful form submission
+      trackFormSubmission('contact_form', true);
+      
+      toast.success("Cảm ơn bạn đã liên hệ! Mình sẽ phản hồi sớm nhất.");
+      reset();
+    } catch (error) {
+      // Track failed form submission
+      trackFormSubmission('contact_form', false);
+      toast.error("Có lỗi xảy ra. Vui lòng thử lại.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -27,53 +64,78 @@ const Contact = () => {
               Nếu bạn có bất kỳ câu hỏi nào hoặc muốn hợp tác, đừng ngần ngại liên hệ!
             </p>
             <div className="space-y-4">
-              <a href="mailto:nghia08092005@gmail.com" className="flex items-center gap-3 text-secondary-foreground hover:text-primary transition-colors">
+              <a href={`mailto:${contactInfo.email}`} className="flex items-center gap-3 text-secondary-foreground hover:text-primary transition-colors">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Mail size={18} className="text-primary" />
                 </div>
-                <span className="text-sm">nghia08092005@gmail.com</span>
+                <span className="text-sm">{contactInfo.email}</span>
               </a>
-              <a href="tel:037844577" className="flex items-center gap-3 text-secondary-foreground hover:text-primary transition-colors">
+              <a href={`tel:${contactInfo.phone}`} className="flex items-center gap-3 text-secondary-foreground hover:text-primary transition-colors">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Phone size={18} className="text-primary" />
                 </div>
-                <span className="text-sm">037 844 577</span>
+                <span className="text-sm">{contactInfo.phone}</span>
               </a>
             </div>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              placeholder="Họ tên"
-              required
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition font-body text-sm"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              required
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition font-body text-sm"
-            />
-            <textarea
-              placeholder="Nội dung"
-              rows={4}
-              required
-              value={form.message}
-              onChange={(e) => setForm({ ...form, message: e.target.value })}
-              className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition resize-none font-body text-sm"
-            />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <input
+                type="text"
+                placeholder="Họ tên"
+                {...register("name")}
+                className={`w-full px-4 py-3 rounded-lg bg-secondary border transition font-body text-sm focus:outline-none focus:ring-2 ${
+                  errors.name ? "border-destructive focus:ring-destructive/50" : "border-border focus:ring-primary/50"
+                } text-foreground placeholder:text-muted-foreground`}
+              />
+              {errors.name && <p className="text-destructive text-xs mt-1">{errors.name.message}</p>}
+            </div>
+
+            <div>
+              <input
+                type="email"
+                placeholder="Email"
+                {...register("email")}
+                className={`w-full px-4 py-3 rounded-lg bg-secondary border transition font-body text-sm focus:outline-none focus:ring-2 ${
+                  errors.email ? "border-destructive focus:ring-destructive/50" : "border-border focus:ring-primary/50"
+                } text-foreground placeholder:text-muted-foreground`}
+              />
+              {errors.email && <p className="text-destructive text-xs mt-1">{errors.email.message}</p>}
+            </div>
+
+            <div>
+              <input
+                type="text"
+                placeholder="Chủ đề"
+                {...register("subject")}
+                className={`w-full px-4 py-3 rounded-lg bg-secondary border transition font-body text-sm focus:outline-none focus:ring-2 ${
+                  errors.subject ? "border-destructive focus:ring-destructive/50" : "border-border focus:ring-primary/50"
+                } text-foreground placeholder:text-muted-foreground`}
+              />
+              {errors.subject && <p className="text-destructive text-xs mt-1">{errors.subject.message}</p>}
+            </div>
+
+            <div>
+              <textarea
+                placeholder="Nội dung"
+                rows={4}
+                {...register("message")}
+                className={`w-full px-4 py-3 rounded-lg bg-secondary border transition resize-none font-body text-sm focus:outline-none focus:ring-2 ${
+                  errors.message ? "border-destructive focus:ring-destructive/50" : "border-border focus:ring-primary/50"
+                } text-foreground placeholder:text-muted-foreground`}
+              />
+              {errors.message && <p className="text-destructive text-xs mt-1">{errors.message.message}</p>}
+            </div>
+
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-display text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+              disabled={isSubmitting}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-display text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Gửi tin nhắn
-              <Send size={16} />
+              {isSubmitting ? <Loader size={16} className="animate-spin" /> : <Send size={16} />}
+              {isSubmitting ? "Đang gửi..." : "Gửi tin nhắn"}
             </button>
           </form>
         </div>

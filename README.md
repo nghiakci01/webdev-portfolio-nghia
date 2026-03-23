@@ -1,73 +1,102 @@
-# Welcome to your Lovable project
+# Portfolio Website - Nguyễn Tuấn Nghĩa
 
-## Project info
+## Giới thiệu
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Website portfolio cá nhân của Nguyễn Tuấn Nghĩa - một nhà phát triển web chuyên nghiệp. Dự án này được xây dựng bằng React, TypeScript và Tailwind CSS để tạo ra trải nghiệm người dùng hiện đại và tối ưu.
 
-## How can I edit this code?
+## Tính năng
 
-There are several ways of editing your application.
+- **Trang chủ**: Giới thiệu cá nhân với avatar và thông tin cơ bản
+- **Giới thiệu**: Thông tin chi tiết về bản thân
+- **Kỹ năng**: Hiển thị các kỹ năng kỹ thuật với mức độ thành thạo
+- **Dự án**: Bộ sưu tập các dự án đã thực hiện với mô tả và công nghệ sử dụng
+- **Liên hệ**: Form liên hệ và thông tin liên lạc
+- **Responsive**: Thiết kế tương thích với mọi thiết bị
+- **Dark/Light mode**: Chuyển đổi chủ đề giao diện
 
-**Use Lovable**
+## Công nghệ sử dụng
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- **Frontend**: React 18, TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS, Shadcn/ui
+- **Routing**: React Router DOM
+- **State Management**: React Query
+- **Forms**: React Hook Form với Zod validation
+- **Icons**: Lucide React
+- **Testing**: Vitest, Testing Library
 
-Changes made via Lovable will be committed automatically to this repo.
+## Cài đặt và chạy
 
-**Use your preferred IDE**
+### Yêu cầu hệ thống
+- Node.js (phiên bản 16 trở lên)
+- npm hoặc yarn
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Các bước cài đặt
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+```bash
+# 1. Clone repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# 2. Di chuyển vào thư mục dự án
+cd webdev-portfolio-nghia
 
-# Step 3: Install the necessary dependencies.
-npm i
+# 3. Cài đặt dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 4. Chạy server phát triển
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Các lệnh khác
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+# Build cho production
+npm run build
 
-**Use GitHub Codespaces**
+# Preview build
+npm run preview
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Chạy tests
+npm run test
 
-## What technologies are used for this project?
+# Lint code
+npm run lint
+```
 
-This project is built with:
+## Triển khai
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Dự án có thể được triển khai trên các nền tảng hosting tĩnh như:
+- Vercel
+- Netlify
+- GitHub Pages
 
-## How can I deploy this project?
+Để triển khai tự động, kết nối repository với nền tảng hosting và cấu hình build command là `npm run build`.
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## Cấu trúc dự án
 
-## Can I connect a custom domain to my Lovable project?
+```
+src/
+├── components/          # Các component UI
+│   ├── ui/             # Component cơ sở từ shadcn/ui
+│   ├── Hero.tsx        # Section trang chủ
+│   ├── About.tsx       # Section giới thiệu
+│   ├── Skills.tsx      # Section kỹ năng
+│   ├── Projects.tsx    # Section dự án
+│   ├── Contact.tsx     # Section liên hệ
+│   └── Footer.tsx      # Footer
+├── pages/              # Các trang
+├── hooks/              # Custom hooks
+├── lib/                # Utilities
+└── assets/             # Hình ảnh và tài nguyên
+```
 
-Yes, you can!
+## Liên hệ
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+**Nguyễn Tuấn Nghĩa**
+- Email: [your-email@example.com]
+- LinkedIn: [your-linkedin]
+- GitHub: [your-github]
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Giấy phép
+
+Dự án này được phân phối dưới giấy phép MIT.
