@@ -26,8 +26,8 @@ export const projectsData: Project[] = [
     desc: "Website thương mại điện tử bán quần áo, xây dựng theo mô hình MVC với PHP thuần.",
     tech: ["PHP", "MySQL", "MVC", "CSS"],
     image: new URL("@/assets/project-clothing.jpg", import.meta.url).href,
-    demo: "#",
-    github: "#",
+    demo: "https://bw-clothes.xo.je/",
+    github: "https://github.com/nghiakci01/webdev-portfolio-nghia",
   },
   {
     title: "Website phụ kiện thú cưng",

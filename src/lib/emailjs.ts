@@ -1,10 +1,12 @@
 import emailjs from "@emailjs/browser";
 import { emailJsConfig } from "./env";
+import { contactInfo } from "./config";
 
 // Initialize EmailJS
-const EMAILJS_SERVICE_ID = emailJsConfig.serviceId;
-const EMAILJS_TEMPLATE_ID = emailJsConfig.templateId;
-const EMAILJS_PUBLIC_KEY = emailJsConfig.publicKey;
+// Initialize EmailJS with trimmed keys to avoid accidental spaces
+const EMAILJS_SERVICE_ID = emailJsConfig.serviceId.trim();
+const EMAILJS_TEMPLATE_ID = emailJsConfig.templateId.trim();
+const EMAILJS_PUBLIC_KEY = emailJsConfig.publicKey.trim();
 
 export const initializeEmailJS = () => {
   if (typeof window !== "undefined" && EMAILJS_PUBLIC_KEY) {
@@ -35,11 +37,16 @@ export const sendContactEmail = async (params: SendEmailParams) => {
       EMAILJS_SERVICE_ID,
       EMAILJS_TEMPLATE_ID,
       {
+        name: params.name, // Added to match the {{name}} in your dashboard screenshot
         from_name: params.name,
         from_email: params.email,
         subject: params.subject,
         message: params.message,
         reply_to: params.email,
+        // Redundant recipient variables to ensure compatibility with various templates
+        to_email: "nghia08092005@gmail.com",
+        recipient_email: "nghia08092005@gmail.com",
+        to_name: "Nguyễn Tuấn Nghĩa",
       },
       EMAILJS_PUBLIC_KEY
     );
@@ -64,9 +71,11 @@ export const sendContactEmail = async (params: SendEmailParams) => {
     });
 
     // Provide a more user-friendly message based on common errors
-    let userMessage = "Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại sau.";
+    let userMessage = "Có lỗi xảy ra khi gửi tin nhắn.";
     if (errorStatus === 422) {
-      userMessage = "Lỗi cấu hình dịch vụ email (422). Vui lòng kiểm tra lại các khóa API.";
+      userMessage = `Lỗi 422 [v4]: ${errorText}. Hãy kiểm tra lại phần "To Email" trong Dashboard của bạn.`;
+    } else {
+      userMessage = `${userMessage} (Lỗi ${errorStatus}: ${errorText})`;
     }
 
     return { success: false, message: userMessage, details: errorText };

@@ -1,5 +1,5 @@
 import { ArrowDown, Github, Facebook, Linkedin } from "lucide-react";
-import avatarImg from "@/assets/1.jpg";
+import avatarImg from "@/assets/avatarnghia.jpg";
 import { contactInfo } from "@/lib/config";
 
 const Hero = () => {
@@ -19,7 +19,7 @@ const Hero = () => {
           <p className="text-muted-foreground max-w-md mb-10 leading-relaxed text-base">
             Xây dựng website hiện đại, tối ưu trải nghiệm người dùng và mang đậm dấu ấn cá nhân.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <a
               href="#projects"
@@ -28,7 +28,7 @@ const Hero = () => {
               Xem dự án
               <ArrowDown size={16} />
             </a>
-            
+
             <div className="flex items-center gap-5">
               <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-secondary/50 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all hover:-translate-y-1">
                 <Facebook size={22} />
