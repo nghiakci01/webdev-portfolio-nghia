@@ -52,12 +52,13 @@ export const appConfig = {
  */
 export function logEnvironmentConfig() {
   if (appConfig.isDevelopment) {
-    console.log('=== Environment Configuration ===');
-    console.log('Mode:', appConfig.environment);
-    console.log('Site URL:', appConfig.siteUrl);
-    console.log('EmailJS configured:', emailJsConfig.isConfigured());
-    console.log('Google Analytics configured:', googleAnalyticsConfig.isConfigured());
-    console.log('==================================');
+    // Only log if explicitly requested or if there's a problem
+    // console.log('=== Environment Configuration ===');
+    // console.log('Mode:', appConfig.environment);
+    // console.log('Site URL:', appConfig.siteUrl);
+    // console.log('EmailJS configured:', emailJsConfig.isConfigured());
+    // console.log('Google Analytics configured:', googleAnalyticsConfig.isConfigured());
+    // console.log('==================================');
   }
 }
 

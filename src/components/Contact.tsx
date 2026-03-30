@@ -7,6 +7,10 @@ import { contactFormSchema, ContactFormData } from "@/lib/validation";
 import { contactInfo } from "@/lib/config";
 import { trackFormSubmission } from "@/lib/analytics";
 
+import { sendContactEmail, SendEmailParams } from "@/lib/emailjs";
+
+
+
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
@@ -22,17 +26,13 @@ const Contact = () => {
     try {
       setIsSubmitting(true);
       
-      // Uncomment and use EmailJS when configured
-      // import { sendContactEmail } from "@/lib/emailjs";
-      // const result = await sendContactEmail(data);
-      // if (!result.success) {
-      //   toast.error(result.message);
-      //   trackFormSubmission('contact_form', false);
-      //   return;
-      // }
-      
-      // For demo purposes, just simulate sending
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const result = await sendContactEmail(data as SendEmailParams);
+
+      if (!result.success) {
+        toast.error(result.message);
+        trackFormSubmission('contact_form', false);
+        return;
+      }
       
       // Track successful form submission
       trackFormSubmission('contact_form', true);
@@ -47,6 +47,7 @@ const Contact = () => {
       setIsSubmitting(false);
     }
   };
+
 
   return (
     <section id="contact" className="section-padding bg-card/50">

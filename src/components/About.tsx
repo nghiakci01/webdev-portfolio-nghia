@@ -2,10 +2,11 @@ import { GraduationCap, Code, Heart } from "lucide-react";
 
 const About = () => {
   const items = [
-    { icon: GraduationCap, text: "Sinh viên ngành Lập Trình Website tại Cao đẳng FPT Polytechnic" },
-    { icon: Heart, text: "Đam mê phát triển website và khám phá công nghệ mới" },
-    { icon: Code, text: "Kinh nghiệm với HTML, CSS, JavaScript, PHP, MySQL" },
+    { icon: GraduationCap, text: "Sinh viên năm cuối chuyên ngành Phát triển Phần mềm tại Cao đẳng FPT Polytechnic" },
+    { icon: Heart, text: "Xây dựng giao diện hướng tới trải nghiệm người dùng tối ưu và phong cách thiết kế hiện đại" },
+    { icon: Code, text: "Chuyên sâu về Framework Laravel (PHP) và hệ sinh thái VueJS cho các dự án Web hiệu năng cao" },
   ];
+
 
   return (
     <section id="about" className="section-padding">

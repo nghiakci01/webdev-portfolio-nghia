@@ -8,8 +8,11 @@ Complete guide to deploying the portfolio website to production.
 3. [Production Build](#production-build)
 4. [Deployment Options](#deployment-options)
 5. [Post-Deployment Setup](#post-deployment-setup)
-6. [Monitoring & Maintenance](#monitoring--maintenance)
-7. [Troubleshooting](#troubleshooting)
+6. [CI/CD Pipeline](#cicd-pipeline)
+7. [Advanced SEO & Meta Tags](#advanced-seo--meta-tags)
+8. [Performance Optimization](#performance-optimization)
+9. [Monitoring & Maintenance](#monitoring--maintenance)
+10. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -349,6 +352,167 @@ Used for:
 - Open Graph meta tags
 - Canonical URLs
 - Email links
+
+---
+
+## CI/CD Pipeline
+
+Using GitHub Actions to automate your build and deployment process.
+
+### GitHub Actions Workflow
+
+Create a file at `.github/workflows/deploy.yml`:
+
+```yaml
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_EMAILJS_SERVICE_ID: ${{ secrets.VITE_EMAILJS_SERVICE_ID }}
+          VITE_EMAILJS_TEMPLATE_ID: ${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}
+          VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}
+          VITE_GOOGLE_ANALYTICS_ID: ${{ secrets.VITE_GOOGLE_ANALYTICS_ID }}
+          VITE_SITE_URL: https://yourportfolio.com
+
+      - name: Deploy to Netlify
+        if: github.ref == 'refs/heads/main'
+        uses: nwtgck/actions-netlify@v3.0
+        with:
+          publish-dir: './dist'
+          production-deploy: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+```
+
+### GitHub Secrets Configuration
+
+1. Go to **Settings** → **Secrets and variables** → **Actions**.
+2. Add the following secrets:
+   - `NETLIFY_SITE_ID`: Your Netlify API Site ID.
+   - `NETLIFY_AUTH_TOKEN`: Your Netlify Personal Access Token.
+   - `VITE_EMAILJS_SERVICE_ID`, etc.: All relevant environment variables.
+
+---
+
+## Advanced SEO & Meta Tags
+
+### 1. Open Graph & Social Cards
+
+Update the `<head>` in `index.html` to include:
+
+```html
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yourportfolio.com/">
+<meta property="og:title" content="Nguyễn Tuấn Nghĩa - Web Developer Portfolio">
+<meta property="og:description" content="Khám phá các dự án và kỹ năng của tôi trong phát triển web.">
+<meta property="og:image" content="https://yourportfolio.com/og-image.jpg">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://yourportfolio.com/">
+<meta property="twitter:title" content="Nguyễn Tuấn Nghĩa - Web Developer Portfolio">
+<meta property="twitter:description" content="Khám phá các dự án và kỹ năng của tôi trong phát triển web.">
+<meta property="twitter:image" content="https://yourportfolio.com/og-image.jpg">
+```
+
+### 2. Sitemap Generation
+
+Generate a `sitemap.xml` automatically using `vite-plugin-sitemap`:
+
+1. Install: `npm install -D vite-plugin-sitemap`
+2. Configure in `vite.config.ts`:
+   ```typescript
+   import Sitemap from 'vite-plugin-sitemap'
+   // ...
+   plugins: [
+     // ...
+     Sitemap({ hostname: 'https://yourportfolio.com' })
+   ]
+   ```
+
+### 3. Structured Data (JSON-LD)
+
+Add to your main layout:
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Nguyễn Tuấn Nghĩa",
+  "jobTitle": "Web Developer",
+  "url": "https://yourportfolio.com",
+  "sameAs": [
+    "https://linkedin.com/in/your-profile",
+    "https://github.com/your-username"
+  ]
+}
+```
+
+---
+
+## Performance Optimization
+
+Deep dive into making your portfolio lightning fast.
+
+### 1. Image Optimization Strategy
+
+- **Format**: Use WebP or AVIF for modern browsers.
+- **Sizes**: Provide responsive images using Vite's query parameters.
+  ```tsx
+  import myImage from './image.jpg?w=400;800;1200&format=webp&as=srcset'
+  // ...
+  <img srcSet={myImage} sizes="(max-width: 600px) 400px, 800px" alt="..." />
+  ```
+- **Lazy Loading**: Always use `loading="lazy"` for images below the fold.
+
+### 2. Code Splitting & Dynamic Imports
+
+Use `React.lazy` for heavy components that aren't needed immediately:
+
+```tsx
+const HeavyComponent = React.lazy(() => import('./HeavyComponent'))
+
+function MyPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <HeavyComponent />
+    </Suspense>
+  )
+}
+```
+
+### 3. Edge Caching & CDN
+
+- **Netlify/Vercel**: Automatically handle global distribution.
+- **Cache-Control Headers**: Set long-term cache for immutable assets (hashed files in `assets/`).
 
 ---
 

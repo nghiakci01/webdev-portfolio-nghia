@@ -1,4 +1,5 @@
 import { Github, Facebook, Linkedin } from "lucide-react";
+import { contactInfo } from "@/lib/config";
 
 const Footer = () => {
   return (
@@ -8,13 +9,13 @@ const Footer = () => {
           © 2025 Nguyễn Tuấn Nghĩa. All rights reserved.
         </p>
         <div className="flex items-center gap-4">
-          <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+          <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
             <Facebook size={20} />
           </a>
-          <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+          <a href={contactInfo.github} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
             <Github size={20} />
           </a>
-          <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+          <a href={contactInfo.linkedin} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
             <Linkedin size={20} />
           </a>
         </div>

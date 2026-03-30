@@ -11,7 +11,6 @@ import { googleAnalyticsConfig } from './env';
  */
 export function initializeGoogleAnalytics() {
   if (!googleAnalyticsConfig.isConfigured()) {
-    console.log('Google Analytics not configured');
     return;
   }
 
@@ -24,8 +23,8 @@ export function initializeGoogleAnalytics() {
 
     // Initialize gtag
     window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      window.dataLayer.push(arguments);
+    function gtag(...args: unknown[]) {
+      window.dataLayer.push(args);
     }
     gtag('js', new Date());
     gtag('config', googleAnalyticsConfig.id, {
@@ -62,7 +61,7 @@ export function trackPageView(pathname: string) {
  * Track custom events
  * Usage: trackEvent('contact_form', { action: 'submit', label: 'Contact Form' })
  */
-export function trackEvent(eventName: string, eventParams?: Record<string, any>) {
+export function trackEvent(eventName: string, eventParams?: Record<string, unknown>) {
   if (!googleAnalyticsConfig.isConfigured()) {
     return;
   }
@@ -115,10 +114,11 @@ export function trackExternalLink(url: string, label: string) {
  */
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
-    dataLayer: any[];
+    gtag: (...args: unknown[]) => void;
+    dataLayer: unknown[];
   }
 }
+
 
 export default {
   initializeGoogleAnalytics,

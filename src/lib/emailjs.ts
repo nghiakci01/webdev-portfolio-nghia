@@ -1,29 +1,17 @@
-// EmailJS configuration module
-// Note: @emailjs/browser needs to be installed: npm install @emailjs/browser
-
-let emailjs: any = null;
-
-try {
-  emailjs = require("@emailjs/browser");
-} catch (error) {
-  console.warn("EmailJS is not installed. Install with: npm install @emailjs/browser");
-}
+import emailjs from "@emailjs/browser";
+import { emailJsConfig } from "./env";
 
 // Initialize EmailJS
-const EMAILJS_SERVICE_ID = "service_your_service_id"; // Replace with your service ID
-const EMAILJS_TEMPLATE_ID = "template_your_template_id"; // Replace with your template ID
-const EMAILJS_PUBLIC_KEY = "your_public_key"; // Replace with your public key
+const EMAILJS_SERVICE_ID = emailJsConfig.serviceId;
+const EMAILJS_TEMPLATE_ID = emailJsConfig.templateId;
+const EMAILJS_PUBLIC_KEY = emailJsConfig.publicKey;
 
 export const initializeEmailJS = () => {
-  if (!emailjs) {
-    console.error("EmailJS is not installed");
-    return;
-  }
-
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && EMAILJS_PUBLIC_KEY) {
     emailjs.init(EMAILJS_PUBLIC_KEY);
   }
 };
+
 
 export interface SendEmailParams {
   name: string;
@@ -55,11 +43,13 @@ export const sendContactEmail = async (params: SendEmailParams) => {
       return { success: true, message: "Email sent successfully" };
     }
     return { success: false, message: "Failed to send email" };
-  } catch (error) {
-    console.error("EmailJS error:", error);
-    return { success: false, message: "Error sending email" };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Error sending email";
+    console.error("EmailJS error:", errorMessage);
+    return { success: false, message: errorMessage };
   }
 };
+
 
 /**
  * Configuration Instructions:

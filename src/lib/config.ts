@@ -1,12 +1,13 @@
 // Skills configuration
 export const skillsData = [
-  { name: "React", level: 90 },
-  { name: "TypeScript", level: 85 },
-  { name: "Tailwind CSS", level: 88 },
+  { name: "Laravel", level: 95 },
+  { name: "PHP", level: 92 },
+  { name: "Vue.js", level: 88 },
+  { name: "Bootstrap", level: 90 },
+  { name: "HTML/CSS", level: 95 },
   { name: "JavaScript", level: 90 },
-  { name: "Vue.js", level: 75 },
-  { name: "PHP", level: 70 },
-  { name: "UI/UX Design", level: 80 },
+  { name: "Tailwind CSS", level: 85 },
+  { name: "React", level: 80 },
 ];
 
 // Projects configuration
@@ -57,10 +58,11 @@ export const navItems = [
 
 // Contact information
 export const contactInfo = {
-  email: "your-email@example.com",
-  phone: "+84 (0) 123 456 789",
-  location: "Ho Chi Minh City, Vietnam",
-  linkedin: "#",
-  github: "#",
-  twitter: "#",
+  email: "nghia08092005@gmail.com",
+  phone: "0372844577",
+  location: "TP. Hồ Chí Minh, Việt Nam",
+  linkedin: "https://linkedin.com/in/nghia-webdev",
+  github: "https://github.com/nghiakci01",
+  facebook: "https://www.facebook.com/nguyen.tuan.nghia.544633/",
 };
+
