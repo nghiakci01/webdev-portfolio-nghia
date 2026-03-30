@@ -21,8 +21,13 @@ export interface SendEmailParams {
 }
 
 export const sendContactEmail = async (params: SendEmailParams) => {
-  if (!emailjs) {
-    return { success: false, message: "EmailJS is not configured" };
+  if (!emailJsConfig.isConfigured()) {
+    console.error("EmailJS check: Configuration is incomplete", {
+      serviceId: !!emailJsConfig.serviceId,
+      templateId: !!emailJsConfig.templateId,
+      publicKey: !!emailJsConfig.publicKey
+    });
+    return { success: false, message: "Email service is not properly configured" };
   }
 
   try {
@@ -42,11 +47,29 @@ export const sendContactEmail = async (params: SendEmailParams) => {
     if (response.status === 200) {
       return { success: true, message: "Email sent successfully" };
     }
-    return { success: false, message: "Failed to send email" };
-  } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "Error sending email";
-    console.error("EmailJS error:", errorMessage);
-    return { success: false, message: errorMessage };
+    return { success: false, message: `Failed to send email (Status: ${response.status})` };
+  } catch (error: any) {
+    // Detailed error logging for debugging 422 and other API errors
+    const errorText = error?.text || error?.message || "Unknown error";
+    const errorStatus = error?.status || "No status";
+    
+    console.error("EmailJS Error Details:", {
+      status: errorStatus,
+      text: errorText,
+      params: {
+        serviceId: EMAILJS_SERVICE_ID,
+        templateId: EMAILJS_TEMPLATE_ID,
+        hasPublicKey: !!EMAILJS_PUBLIC_KEY
+      }
+    });
+
+    // Provide a more user-friendly message based on common errors
+    let userMessage = "Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại sau.";
+    if (errorStatus === 422) {
+      userMessage = "Lỗi cấu hình dịch vụ email (422). Vui lòng kiểm tra lại các khóa API.";
+    }
+
+    return { success: false, message: userMessage, details: errorText };
   }
 };
 

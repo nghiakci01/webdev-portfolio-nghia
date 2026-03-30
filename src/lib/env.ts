@@ -77,6 +77,11 @@ export function validateEnvironmentVariables() {
     if (!googleAnalyticsConfig.isConfigured()) {
       console.warn('Warning: Google Analytics is not configured for production');
     }
+
+    // In production, error if EmailJS is not configured
+    if (!emailJsConfig.isConfigured()) {
+      errors.push('EmailJS is not properly configured. Check VITE_EMAILJS_* environment variables.');
+    }
   }
 
   if (errors.length > 0) {

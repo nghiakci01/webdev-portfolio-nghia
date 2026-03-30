@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/hooks/use-theme";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { initializeGoogleAnalytics } from "@/lib/analytics";
+import { initializeEmailJS } from "@/lib/emailjs";
 import { logEnvironmentConfig, validateEnvironmentVariables } from "@/lib/env";
 import { usePageTracking } from "@/hooks/use-page-tracking";
 import Index from "./pages/Index";
@@ -37,6 +38,9 @@ const App = () => {
     
     // Initialize Google Analytics if configured
     initializeGoogleAnalytics();
+
+    // Initialize EmailJS if configured
+    initializeEmailJS();
   }, []);
 
   return (
